@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles1.css">
+    <title>Bartender Game</title>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+
+    <div class="container">
+        <h1>Bartender Game</h1>
+        <a href="index2.html">
+            <button id="startButton">Start Game</button>
+        </a>
+    </div>
+
+
+
+    <script>
+        document.getElementById("startButton").addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent default link behavior
+
+            // Show the loading screen
+            document.getElementById("loadingScreen").style.display = "flex";
+
+            // Simulate loading delay (for example, 2 seconds)
+            setTimeout(function() {
+                window.location.href = "index2.html"; // Redirect to the next page
+            }, 2000); // Adjust the duration as needed
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Bartender Game</title>
+  
+</head>
+<body>
+  
+    <h1>SELECT YOUR DRINK</h1>
+    
+    <div id="ingredients">  
+        <button onclick="addIngredient('Orange peel')">Orange peel</button>
+        <button onclick="addIngredient('Angostura bitters')">Angostura bitters</button>
+        <button onclick="addIngredient('Sugar cube')">Sugar cube</button>
+        <button onclick="addIngredient('Bourbon')">Bourbon</button>
+        <button onclick="addIngredient('Lemon twist')">Lemon twist</button>
+        <button onclick="addIngredient('Dry vermouth')">Dry vermouth</button>
+        <button onclick="addIngredient('Grenadine')">Grenadine</button>
+        <button onclick="addIngredient('Lime juice')">Lime juice</button>
+        <button onclick="addIngredient('Pineapple Juice')">Pineapple Juice</button>
+        <button onclick="addIngredient('White Rum')">White Rum</button>
+        <button onclick="addIngredient('Vodka')">Vodka</button>
+        <button onclick="addIngredient('Dark Rum')">Dark Rum</button>
+        <button onclick="addIngredient('Gin')">Gin</button>
+        <button onclick="addIngredient('Tequila')">Tequila</button>
+    </div>
+    
+    <h2>Your Drink: <span id="drink"></span></h2>
+    <h2 id="score">Total Score: 0</h2>
+    
+    <button onclick="serveDrink()">Serve Drink</button>
+
+    <!-- Popup for result -->
+    <div id="resultPopup">
+        <img id="resultImage" src="" alt="Result Image">
+        <p id="resultMessage" class="outline-text"></p>
+        <button class="close-button" onclick="closePopup()">Close</button>
+    </div>
+
+    <script>
+        let drink = '';
+        let ingredients = [];
+        let totalScore = 0;
+
+        // Get the selected celebrity from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedCelebrity = urlParams.get('celebrity');
+
+        // Define your specific drink recipes and their scores
+        const recipes = {
+            "Rum Punch": {
+                ingredients: ["White Rum", "Dark Rum", "Pineapple Juice", "Lime juice", "Grenadine"],
+                score: 50
+            },
+            "Vodka Martini": {
+                ingredients: ["Vodka", "Dry vermouth", "Lemon twist"],
+                score: 50
+            },
+            "Old Fashioned": {
+                ingredients: ["Bourbon", "Sugar cube", "Angostura bitters", "Orange peel"],
+                score: 50
+            }
+        };
+
+        // Function to add ingredients
+        function addIngredient(ingredient) {
+            drink += (drink ? ', ' : '') + ingredient;
+            ingredients.push(ingredient);  // Keep track of added ingredients
+            document.getElementById('drink').innerText = drink;
+        }
+
+        // Function to check if the drink matches the correct recipe for the selected celebrity
+        function checkDrink() {
+            let correctRecipe = '';
+
+            switch (selectedCelebrity) {
+                case 'john':
+                    correctRecipe = "Rum Punch";
+                    break;
+                case 'lebron':
+                    correctRecipe = "Vodka Martini";
+                    break;
+                case 'dale':
+                    correctRecipe = "Old Fashioned";
+                    break;
+                default:
+                    return null;
+            }
+
+            const { ingredients: recipeIngredients, score } = recipes[correctRecipe];
+            // Check if all the ingredients match in the correct order
+            if (ingredients.length === recipeIngredients.length && 
+                ingredients.every((ing, index) => ing === recipeIngredients[index])) {
+                return { drinkName: correctRecipe, score };
+            }
+
+            return null;
+        }
+
+        // Function to serve the drink
+        function serveDrink() {
+            const result = checkDrink();
+            const resultImage = document.getElementById("resultImage");
+            const resultMessage = document.getElementById("resultMessage");
+            const resultPopup = document.getElementById("resultPopup");
+
+            if (result) {
+                // If the drink matches the recipe
+                totalScore += result.score;
+                resultImage.src = "https://i.imgur.com/tes3uMU.png"; // Happy image
+                resultMessage.innerText = `You served a ${result.drinkName}!\nYou earned ${result.score} points.\nTotal score: ${totalScore}`;
+            } else if (ingredients.length > 0) {
+                // If the drink doesn't match any recipe but has ingredients
+                totalScore -= 25;  // Deduct points for incorrect drink
+                resultImage.src = "https://i.imgur.com/00xNbzV.png"; // Angry image
+                resultMessage.innerText = `You served a wrong drink! 25 points have been deducted.\nTotal score: ${totalScore}`;
+            } else {
+                // No ingredients added
+                alert('Please add ingredients first!');
+                return; // Exit the function
+            }
+
+            // Display the result popup
+            resultPopup.style.display = "block";
+
+            // Reset drink and ingredients
+            drink = '';
+            ingredients = [];
+            document.getElementById('drink').innerText = '';
+            document.getElementById('score').innerText = `Total Score: ${totalScore}`;
+        }
+
+        // Function to close the popup
+        function closePopup() {
+            document.getElementById("resultPopup").style.display = "none";
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exciting Incremental Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Press Start 2P', cursive;
+            text-align: center;
+            margin: 0; /* Remove default margin */
+            overflow: hidden; /* Prevent scrolling */
+            background-color: #ffffff; /* Fallback color */
+        }
+        #background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://www.english-heritage.org.uk/siteassets/home/learn/histories/medieval-castle/brough-feature-image2.jpg?w=1440&h=612&mode=crop&scale=both&quality=100&anchor=NoFocus&WebsiteVersion=20200219'); /* Example medieval image */
+            background-size: cover; /* Cover the entire area */
+            animation: moveBackground 20s linear infinite; /* Animation for the moving effect */
+            z-index: -1; /* Send the background to the back */
+        }
+
+        @keyframes moveBackground {
+            0% { background-position: 0 0; }
+            100% { background-position: 100% 0; } /* Move background horizontally */
+        }
+        #menu {
+            display: flex;
+            flex-direction: column; /* Stack buttons vertically */
+            align-items: center;    /* Center buttons horizontally */
+            justify-content: center; /* Center buttons vertically */
+            height: 100vh; /* Full height for centering */
+        }
+        #points {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 2rem;
+            margin: 20px;
+            color: #513B1C; /* Change text color for visibility */
+            display: none; /* Initially hide points display */
+        }
+        .button {
+            width: 200px; /* Set a fixed width for all buttons */
+            padding: 10px; /* Adjust padding for button size */
+            margin: 10px; /* Space between buttons */
+            font-size: 1rem;
+            font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #513B1C;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            letter-spacing: 3px;
+        }
+        .button:hover {
+            background-color: #A97142;
+        }
+        #game-container {
+            display: none; /* Initially hide game container */
+        }
+        .about {
+            color: white;
+        }
+        h1 {
+            color: #dbc6a8;
+            font-family: 'Times New Roman', Times, serif;
+            letter-spacing: 5px;
+            text-shadow: 
+                0 0 5px #c7a87c,   /* White glow */
+                0 0 10px #513B1C,  /* White glow */
+                0 0 15px #513B1C,  /* Darker glow */
+                0 0 20px #513B1C;  /* Darker glow */
+        }
+        h2 {
+            color: #dbc6a8;
+            font-family: 'Times New Roman', Times, serif;
+            letter-spacing: 5px;
+            text-shadow: 
+                0 0 5px #c7a87c,   /* White glow */
+                0 0 10px #513B1C,  /* White glow */
+                0 0 15px #513B1C,  /* Darker glow */
+                0 0 20px #513B1C;  /* Darker glow */
+        }
+        p {
+            color: #804400;
+            font-size: 30px;
+            font-weight: bold;
+            font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            letter-spacing: 5px;
+            text-shadow: 
+                0 0 5px #c7a87c,   /* White glow */
+                0 0 10px #c7a87c,  /* White glow */
+                0 0 15px #c7a87c,  /* Darker glow */
+                0 0 20px #c7a87c;  /* Darker glow */
+        }
+        #tokens {
+            display: flex; /* Use flexbox to arrange buttons */
+            flex-wrap: wrap; /* Allow wrapping of buttons */
+            justify-content: center; /* Center the buttons */
+            margin: 20px; /* Add some margin around the tokens display */
+        }
+
+        .token {
+            margin: 10px; /* Add spacing between token buttons */
+            min-width: 180px; /* Ensure buttons have a minimum width */
+        }
+        
+        #unlock-message {
+            color: yellow; /* Color for the unlock message */
+            font-size: 1.5rem;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="background"></div> <!-- Moving background -->
+    
+    <!-- Main Menu -->
+    <div id="menu">
+        <h1>Incremental Clicking Game</h1>
+        <button id="start-button" class="button">Start</button>
+        <button id="about-button" class="button">About</button>
+    </div>
+
+    <!-- Game Container -->
+    <div id="game-container">
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <div id="points">POINTS: 0</div>
+        <button id="collect-button" class="button">EARN</button>
+        <h2>Unlockable Tokens</h2>
+        <div id="tokens"></div>
+        <div id="unlock-message"></div> <!-- Added message display -->
+    </div>
+
+    <div id="about-section" class="about" style="display: none;">
+        <h2>CREDITS</h2>
+        <p>
+            <br>GAME DESIGNER<br>
+            Isidro, drew V.<br><br>
+
+            <br>WEB DESIGNER<br>
+            Del Rosario, Athea B.<br>
+            Santos, Clark Kenneth C.<br><br>
+            
+            <br>INTERACTIVE<br>
+            Jumawan James Ezekiel</p>
+        <button id="back-button" class="button">Back</button>
+    </div>
+    
+    <script>
+        let points = 0;
+        let pointsPerClick = 1;
+        const tokens = [
+            { name: 'Recruit Spartan',  cost: 50, effect: () => { pointsPerClick *= 1; } },
+            { name: 'Recruit Horsemen', cost: 50, effect: () => { pointsPerClick *= 1; } },
+            { name: 'Recruit Archer', cost: 50, effect: () => { pointsPerClick *= 1; } }, 
+            { name: 'Recruit Canon', cost: 50, effect: () => { pointsPerClick *= 1; } },
+            { name: 'Recruit Headbreaker', cost: 100, effect: () => { pointsPerClick *= 1; } }, 
+            { name: 'Recruit Fiery Swordsman', cost: 100, effect: () => { pointsPerClick *= 1; } },
+
+            { name: 'Fire Dragon', cost: 1000, effect: () => { pointsPerClick += 3; } },
+            { name: 'Geo Dragon', cost: 1000, effect: () => { pointsPerClick += 3; } }, 
+            { name: 'Hydro Dragon', cost: 1000, effect: () => { pointsPerClick += 3; } }, 
+            { name: 'Shadow Dragon', cost: 1000, effect: () => { pointsPerClick += 3; } }, 
+
+            { name: 'Death Black Void', cost: 5000, effect: () => { setInterval(() => { points += 10; updatePoints(); }, 1000); } },
+            { name: 'End of the World', cost: 10000, effect: () => { pointsPerClick *= 10; } },
+        ];
+
+        // DOM Elements
+        const pointsDisplay = document.getElementById('points');
+        const collectButton = document.getElementById('collect-button');
+        const tokensDisplay = document.getElementById('tokens');
+        const unlockMessage = document.getElementById('unlock-message'); // Unlock message display
+
+        // Update Points Display
+        function updatePoints() {
+            pointsDisplay.textContent = `Points: ${points}`;
+            checkUnlocks();
+        }
+
+        // Collect Points
+        collectButton.addEventListener('click', () => {
+            points += pointsPerClick;
+            updatePoints();
+        });
+
+        // Check Unlockable Tokens
+        function checkUnlocks() {
+            tokensDisplay.innerHTML = ''; // Clear current tokens display
+            unlockMessage.textContent = ''; // Clear previous unlock message
+
+            tokens.forEach(token => {
+                const button = document.createElement('button');
+                button.textContent = `${token.name} (Cost: ${token.cost} Points)`; // Initial button text
+                button.className = 'button token';
+                button.disabled = points < token.cost; // Disable if points are insufficient
+                button.classList.toggle('disabled', points < token.cost); // Add disabled class
+
+                // Unlock token on click
+        button.addEventListener('click', () => {
+            if (points >= token.cost) {
+                    points -= token.cost; // Deduct points
+                    token.effect(); // Apply token effect
+                    unlockMessage.textContent = `Unlocked ${token.name}!`; // Set unlock message
+                    alert(`You have successfully unlocked ${token.name}!`); // Alert message upon unlock
+                    button.textContent = "Recruited!"; // Change button text after unlock
+                    button.disabled = true; // Disable the button after it's unlocked
+                    setTimeout(() => {
+                        unlockMessage.textContent = ''; // Clear message after 3 seconds
+                    }, 3000);
+                    updatePoints();
+                    checkUnlocks(); // Recheck unlocks
+                } else {
+                    alert("Not enough points to unlock this token!"); // Alert if not enough points
+                }
+            });
+
+                tokensDisplay.appendChild(button); // Add button to tokens display
+            });
+        }
+
+        // Initial Display
+        updatePoints();
+
+        const startButton = document.getElementById('start-button');
+        const settingsButton = document.getElementById('settings-button');
+        const aboutButton = document.getElementById('about-button');
+        const exitButton = document.getElementById('exit-button');
+        const gameContainer = document.getElementById('game-container');
+        const pointDisplay = document.getElementById('points');
+        const menu = document.getElementById('menu');
+        const aboutSection = document.getElementById('about-section');
+        const backButton = document.getElementById('back-button');
+
+        // Start Game
+        startButton.addEventListener('click', () => {
+            menu.style.display = 'none'; // Hide menu
+            gameContainer.style.display = 'block'; // Show game container
+            pointsDisplay.style.display = 'block'; // Show points display
+            updatePoints(); // Initialize points display
+        });
+
+        // About Section
+        aboutButton.addEventListener('click', () => {
+            menu.style.display = 'none'; // Hide menu
+            aboutSection.style.display = 'block'; // Show about section
+        });
+
+        // Back to Menu
+        backButton.addEventListener('click', () => {
+            aboutSection.style.display = 'none'; // Hide about section
+            menu.style.display = 'flex'; // Show menu again
+        });
+
+        // Exit Game
+        exitButton.addEventListener('click', () => {
+            window.close(); // Close the window (may not work in all browsers)
+        });
+
+        // Hide game container initially
+        gameContainer.style.display = 'none';
+    </script>
+</body>
+</html>

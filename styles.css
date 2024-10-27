@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
+
+
+body {
+    font-family: Kanit, sans-serif;
+    background-image: url('https://i.imgur.com/GI7RaW9.jpeg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+button {
+    margin: 5px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+#drink {
+    font-weight: bold;
+}
+
+h2 {
+  color:white;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #422800;
+}
+
+
+
+p {
+  color:white;
+}
+
+h1 {
+    color:white;
+    font-size: 50px;
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: #422800;
+}
+
+.outline-text {
+    color: white;
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: white;
+    font-size: 24px;
+}
+
+/* Popup styles */
+#resultPopup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 1000;
+}
+
+#resultImage {
+    max-width: 200px;
+    margin-bottom: 10px;
+}
+
+/* Close button styles */
+.close-button {
+    background-color: #422800;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    margin-top: 10px;
+}

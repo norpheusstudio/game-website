@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Celebrity Bartender</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+
+    <header>
+        <h1>Celebrity Bartender</h1>
+        <p>Mix drinks inspired by your favorite celebrities!</p>
+    </header>
+    <br><br>
+    <main>
+        <section id="celebrity-select">
+            <h2 style="color: rgba(62, 65, 45, 0.973)">Pick Your Celebrity</h2>
+            <select id="celebrityDropdown" onchange="showDrink()">
+                <option value="" selected>Select</option>
+                <option value="john">John Loyd Cruz</option>
+                <option value="lebron">Lebron James</option>
+                <option value="dale">Dale Armstrong</option>
+            </select>
+        </section>
+
+        <section id="drink-recipe">
+            <h2 style="color: rgba(62, 65, 45, 0.973)">Drink Recipe</h2>
+            <div id="drinkDetails">
+                <p>Select a celebrity to see their favorite cocktail!</p>
+            </div>
+        </section>
+        
+        <img id="celebrityImage" src="https://i.imgur.com/3y5WZFw.jpeg" alt="Celebrity Image"
+             style="max-width: 300px; margin-top: 1rem; display: block;"> <!-- Ensure it's displayed -->
+        <button class="button" id="proceedButton">Proceed</button>
+    </main>
+
+    <script>
+        const celebrityImages = {
+            john: "https://i.imgur.com/iwim0AY.jpeg",
+            lebron: "https://i.imgur.com/EQ2S12X.jpeg",
+            dale: "https://i.imgur.com/kiYOtf3.jpeg"
+        };
+        
+        const defaultImageUrl = "https://i.imgur.com/3y5WZFw.jpeg"; // Default image URL
+        
+        function showDrink() {
+            const drinkDetails = document.getElementById("drinkDetails");
+            const celebrityImage = document.getElementById("celebrityImage");
+            const selectedCelebrity = document.getElementById("celebrityDropdown").value;
+
+            let recipe = "";
+            let imageUrl = defaultImageUrl; // Start with the default image
+
+            switch (selectedCelebrity) {
+                case "john":
+                    recipe = `
+                        <h3>John Loyd Cruz's Favorite Drink</h3>
+                        <p><strong>Drink Name:</strong> Rum Punch</p>
+                        <p><strong>Ingredients:</strong> White rum, Dark rum, Pineapple juice, Lime juice, Grenadine</p>
+                        <p><strong>Instructions:</strong> Mix all ingredients in a shaker with ice. Shake well and serve over ice in a tall glass.</p>
+                    `;
+                    imageUrl = celebrityImages.john;
+                    break;
+                case "lebron":
+                    recipe = `
+                        <h3>Lebron James's Favorite Drink</h3>
+                        <p><strong>Drink Name:</strong> Vodka Martini</p>
+                        <p><strong>Ingredients:</strong> Vodka, Dry vermouth, Lemon twist</p>
+                        <p><strong>Instructions:</strong> Stir vodka and vermouth with ice. Strain into a chilled martini glass and garnish with a lemon twist.</p>
+                    `;
+                    imageUrl = celebrityImages.lebron;
+                    break;
+                case "dale":
+                    recipe = `
+                        <h3>Dale Armstrong's Favorite Drink</h3>
+                        <p><strong>Drink Name:</strong> Old Fashioned</p>
+                        <p><strong>Ingredients:</strong> Bourbon, Sugar cube, Angostura bitters, Orange peel</p>
+                        <p><strong>Instructions:</strong> Muddle sugar cube with bitters in a glass. Add ice, pour bourbon over, and garnish with orange peel.</p>
+                    `;
+                    imageUrl = celebrityImages.dale;
+                    break;
+                default:
+                    recipe = `<p>Select a celebrity to see their favorite cocktail!</p>`;
+            }
+
+            drinkDetails.innerHTML = recipe;
+            celebrityImage.src = imageUrl; // Update the image based on selection
+        }
+
+        document.getElementById("proceedButton").addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent default button behavior
+
+            // Get the selected celebrity
+            const selectedCelebrity = document.getElementById("celebrityDropdown").value;
+
+            if (!selectedCelebrity) {
+                alert('Please select a celebrity first!'); // Alert if no celebrity is selected
+                return; // Exit the function
+            }
+
+            // Show the loading screen
+            document.getElementById("loadingScreen").style.display = "flex";
+
+            // Simulate loading delay (for example, 2 seconds)
+            setTimeout(function() {
+                // Redirect to the next page with the selected celebrity
+                window.location.href = `index3.html?celebrity=${selectedCelebrity}`;
+            }, 2000); // Adjust the duration as needed
+        });
+    </script>
+</body>
+</html>
